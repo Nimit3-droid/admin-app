@@ -83,7 +83,7 @@ const Products = (props) => {
                   <td>{product.price}</td>
                   <td>{product.quantity}</td>
                   <td>
-                    {product.category === undefined
+                    {product.category === undefined ||product.category ===null
                       ? "Root Category"
                       : product.category.name}
                   </td>

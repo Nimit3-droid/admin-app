@@ -4,17 +4,24 @@ import { Modal, Button } from "react-bootstrap";
 function NewModal(props) {
   return (
     <Modal size={props.size} show={props.show} onHide={props.handleClose}>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton="false">
         <Modal.Title>{props.modalTitle}</Modal.Title>
       </Modal.Header>
       <Modal.Body>{props.children}</Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={props.handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={props.handleClose}>
-          Save Changes
-        </Button>
+        {props.buttons ? (
+          props.buttons.map((btn, index) => {
+            return (
+              <Button key={index} variant={btn.color} onClick={btn.onClick}>
+                {btn.label}
+              </Button>
+            );
+          })
+        ) : (
+          <Button variant="primary" {...props} className = "btn-sm" style={{backgroundColor: "#333"}} onClick={props.handleClose}>
+            Save
+          </Button>
+        )}
       </Modal.Footer>
     </Modal>
   );
