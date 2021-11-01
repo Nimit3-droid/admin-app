@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Layout from "../../components/Layout";
-import { Container, Form, Button, Row, Col } from "react-bootstrap";
-import Input from "../../components/UI/Input/";
-import { useSelector, useDispatch } from "react-redux";
+import { Container, Form, Row, Col, Button } from "react-bootstrap";
+import Input from "../../components/UI/Input";
 import { Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { signup } from "../../actions";
+import { useEffect } from "react";
+ 
 
-function Signup() {
+const Signup = (props) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,22 +17,37 @@ function Signup() {
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!user.loading) {
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+    }
+  }, [user.loading]);
+
   const userSignup = (e) => {
     e.preventDefault();
+
     const user = {
       firstName,
       lastName,
       email,
       password,
     };
+
     dispatch(signup(user));
   };
+
   if (auth.authenticate) {
     return <Redirect to={`/`} />;
   }
+
   if (user.loading) {
-    return <p>Loading...</p>;
+    return <p>Loading...!</p>;
   }
+
   return (
     <Layout>
       <Container>
@@ -58,6 +75,7 @@ function Signup() {
                   />
                 </Col>
               </Row>
+
               <Input
                 label="Email"
                 placeholder="Email"
@@ -67,13 +85,12 @@ function Signup() {
               />
 
               <Input
-                label="password"
-                placeholder="password"
+                label="Password"
+                placeholder="Password"
                 value={password}
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />
-
               <Button variant="primary" type="submit">
                 Submit
               </Button>
@@ -83,6 +100,6 @@ function Signup() {
       </Container>
     </Layout>
   );
-}
+};
 
 export default Signup;
